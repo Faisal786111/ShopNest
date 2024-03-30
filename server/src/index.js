@@ -1,3 +1,4 @@
+const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const express = require("express");
 const dotenv = require("dotenv");
 const productRouter = require("./routes/productRoute");
@@ -12,6 +13,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/products", productRouter);
+
+//Error middleware
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log("listening on port " + port);
