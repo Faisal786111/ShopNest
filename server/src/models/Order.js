@@ -1,4 +1,4 @@
-const { Schema, mongoose } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const orderSchema = new Schema({
     user: {
