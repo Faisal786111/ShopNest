@@ -7,14 +7,19 @@ import VITE_BACKEND from "../api/vite_backend";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
-  const [product, setProduct] = useState({});
-
+  const [product, setProduct] = useState([{}]);
+  console.log(productId);
   useEffect(() => {
     const fetchProduct = async () => {
-      const { data } = await axios.get(
-        `${VITE_BACKEND}/api/products/${productId}`
-      );
-      setProduct(data);
+      try {
+        const { data } = await axios.get(
+          `${VITE_BACKEND}/api/products/${productId}`
+        );
+        const [product] = data;
+        setProduct(product);
+      } catch (e) {
+        console.log("Error while fetching a single product : " + e);
+      }
     };
 
     fetchProduct();
