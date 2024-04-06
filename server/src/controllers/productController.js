@@ -10,7 +10,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: "Not found." });
     }
     return res.json(products);
-})
+});
 
 // @desc    Fetch single product by Id
 // @route   GET /api/products/:id
@@ -21,8 +21,7 @@ const getProductById = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("Resource not found.");
     }
-    console.log(product);
     return res.json(product);
-})
+});
 
 module.exports = { getAllProducts, getProductById };
