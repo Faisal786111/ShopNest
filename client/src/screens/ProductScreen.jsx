@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Button } from "react-bootstrap";
 import Rating from "../components/Rating";
 import axios from "axios";
-import VITE_BACKEND from "../api/vite_backend";
+import {VITE_BACKEND} from "../api/constants";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();

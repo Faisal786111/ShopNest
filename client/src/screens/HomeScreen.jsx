@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
 import axios from "axios";
-import VITE_BACKEND from "../api/vite_backend";
+import {VITE_BACKEND} from "../api/constants";
 
 const HomeScreen = () => {
   const [products, setProducts] = useState([]);
