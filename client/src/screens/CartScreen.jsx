@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
-import { addToCart } from "../redux/slices/cartSlice";
+import { addToCart, removeFromCart } from "../redux/slices/cartSlice";
 import {
   Image,
   Col,
@@ -18,7 +18,11 @@ const CartScreen = () => {
   const dispatch = useDispatch();
 
   const addToCartHandler = (product, qty) => {
-    dispatch(addToCart({...product, qty}));
+    dispatch(addToCart({ ...product, qty }));
+  };
+
+  const removeFromCartHandler = (id) => {
+    dispatch(removeFromCart(id));
   };
 
   const { cartItems } = useSelector((state) => state.cart);
@@ -59,7 +63,11 @@ const CartScreen = () => {
                     </Form.Control>
                   </Col>
                   <Col md={2}>
-                    <Button type="button" variant="light">
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => removeFromCartHandler(item._id)}
+                    >
                       <FaTrash />
                     </Button>
                   </Col>
