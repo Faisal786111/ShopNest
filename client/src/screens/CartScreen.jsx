@@ -25,6 +25,10 @@ const CartScreen = () => {
     dispatch(removeFromCart(id));
   };
 
+  const checkoutHanlder = ()=>{
+    navigate("/login?redirect=shipping");
+  }
+
   const { cartItems } = useSelector((state) => state.cart);
 
   return (
@@ -96,6 +100,7 @@ const CartScreen = () => {
                 type="button"
                 className="btn-block"
                 disabled={cartItems.length === 0}
+                onClick={checkoutHanlder}
               >
                 Proceed to checkout
               </Button>
