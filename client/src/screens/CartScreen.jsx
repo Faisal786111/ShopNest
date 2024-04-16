@@ -33,7 +33,7 @@ const CartScreen = () => {
 
   return (
     <Row>
-      <Col md={8} className="border border-primary">
+      <Col md={8}>
         <h1 className="mb-3">Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message>
