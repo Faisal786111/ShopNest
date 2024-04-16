@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const asyncHandler = require("../middlewares/asyncHandler");
-const jwt = require("jsonwebtoken");
+const generateToken = require("../utils/generateToken");
 
 // @desc    Auth user & get token
 // @route   GET /api/users/login
@@ -14,24 +14,37 @@ const authUser = asyncHandler(async (req, res) => {
         throw new Error("Invalid email and password.");
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
-
-    res.cookie("jwt", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== "development",
-        sameSite: "strict", // to prevent attacks (ex : cross site scripting)
-        maxAge: 30 * 24 * 60 * 60 * 1000, //30days
-    });
+    generateToken(res, user._id);
 
     return res.json(user);
 });
 
 // @desc    Register user
-// @route   POST /api/users/register
+// @route   POST /api/users
 // @access  Public 
 const registerUser = asyncHandler(async (req, res) => {
+    console.log(req.body);
+    const { name, email, password } = req.body;
 
-    return res.json("register API");
+    const userExists = await User.findOne({ email });
+
+    if (!userExists) {
+        const user = await User.create({
+            name,
+            email,
+            password
+        })
+
+        if (!user) {
+            res.status(400);
+            throw new Error("Invalid user data.");
+        }
+        generateToken(res, user._id);
+
+        return res.status(201).json({ message: "User created successfully." });
+    }
+
+    return res.status(400).json({ message: "User already exists." });
 });
 
 // @desc    Logout user & clear cookie
