@@ -6,10 +6,8 @@ const jwt = require("jsonwebtoken");
 // @route   GET /api/users/login
 // @access  Public 
 const authUser = asyncHandler(async (req, res) => {
-    console.log(req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    console.log(process.env.JWT_SECRET);
 
     if (!user || !(await user.matchPassword(password))) {
         res.status(401);
@@ -40,16 +38,19 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/logout
 // @access  Private
 const logoutUser = asyncHandler(async (req, res) => {
+    res.clearCookie("jwt");
 
-    return res.json("Logout API");
+    const { name } = req.user;
+    return res.json({ message: `${name} Successfully logged out.` });
 });
 
 // @desc    Get user profile
 // @route   POST /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
+    const { user } = req;
 
-    return res.json("get user profile");
+    return res.json(user);
 });
 
 // @desc    Update user profile

@@ -1,5 +1,6 @@
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -17,15 +18,19 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/" , (req , res)=>{
-    res.json({message : "API is running"});
+// Cookie parser middleware
+app.use(cookieParser());
+
+app.get("/", (req, res) => {
+    res.json({ message: "API is running" });
 })
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 
-//Error middleware
+//  Error middleware
 app.use(notFound);
 app.use(errorHandler);
+
 
 app.listen(port, () => {
     console.log("listening on port " + port);
