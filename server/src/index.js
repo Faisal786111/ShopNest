@@ -11,8 +11,12 @@ const cors = require("cors");
 const port = process.env.PORT || 2000;
 
 const app = express();
+const corsOptions = {
+    origin: true, // Change this to the origin(s) you want to allow.
+    credentials: true, // Indicates that cookies and credentials should be included.
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Body parser middleware
 app.use(express.json());

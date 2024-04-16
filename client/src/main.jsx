@@ -11,6 +11,7 @@ import HomeScreen from "./screens/HomeScreen.jsx";
 import NotFound from "./components/NotFound.jsx";
 import ProductScreen from "./screens/ProductScreen.jsx";
 import CartScreen from "./screens/CartScreen.jsx";
+import LoginScreen from "./screens/LoginScreen.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route index element={<HomeScreen />} />
             <Route path="/product/:id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
+            <Route path="/login" element={<LoginScreen />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
