@@ -41,7 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
         }
         generateToken(res, user._id);
 
-        return res.status(201).json({ message: "User created successfully." });
+        return res.status(201).json({ message: "User created successfully." , user});
     }
 
     return res.status(400).json({ message: "User already exists." });
@@ -70,8 +70,27 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
+    const allowedToUpdates = ["name", "email", "password"];
+    const updates = Object.keys(req.body);
 
-    return res.json("update user profile");
+    console.log(updates);
+    console.log(req.body);
+
+
+    const isValidToUpdate = updates.every(update => allowedToUpdates.includes(update));
+
+    if (!isValidToUpdate) {
+        res.status(400);
+        throw new Error("Invalid to update fields.");
+    }
+
+    updates.forEach(update =>
+        req.user[update] = req.body[update]
+    )
+
+    await req.user.save();
+
+    return res.json({ message: "Successfully updated user profile.", user: req.user });
 });
 
 // @desc    Get users
