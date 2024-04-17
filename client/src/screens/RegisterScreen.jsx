@@ -1,22 +1,22 @@
-import { Form, Row, Col, Button } from "react-bootstrap";
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { setCredentials } from "../redux/slices/authSlice";
-import { useLoginMutation } from "../redux/slices/usersApiSlice";
+import { Button, Form, Row, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { setCredentials } from "../redux/slices/authSlice";
+import { useRegisterMutation } from "../redux/slices/usersApiSlice";
 import FormContainer from "../components/FormContainer";
 import toast from "react-hot-toast";
 import Loader from "../components/Loader";
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [login, { isLoading }] = useLoginMutation();
-
+  const [register, { isLoading }] = useRegisterMutation();
   const { userInfo } = useSelector((state) => state.auth);
 
   const { search } = useLocation();
@@ -30,24 +30,12 @@ const LoginScreen = () => {
   }, [userInfo, redirect, navigate]);
 
   const submitHandler = async (e) => {
-    // toast.success("Here is your toast.", {
-    //   style: {
-    //     border: "1px solid #7b8a8b",
-    //     padding: "16px",
-    //     color: "#7b8a8b",
-    //   },
-    //   iconTheme: {
-    //     primary: "#7b8a8b",
-    //     secondary: "#FFFAEE",
-    //   },
-    // });
-
     e.preventDefault();
+    console.log("Submit");
+
     try {
-      // unwrap() is used to return promise.
-      const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      toast.success("Succesfully login");
+      const { user } = await register({ name, email, password }).unwrap();
+      dispatch(setCredentials({ ...user }));
       navigate(redirect);
     } catch (e) {
       toast.error(e?.data?.message || e.error);
@@ -56,24 +44,33 @@ const LoginScreen = () => {
 
   return (
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Sign Up</h1>
       <Form onSubmit={submitHandler}>
+        <Form.Group className="mb-3" controlId="name">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </Form.Group>
         <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
-            placeholder="Enter Email"
+            placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </Form.Group>
-
         <Form.Group className="mb-3" controlId="password">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>password</Form.Label>
           <Form.Control
             type="password"
-            placeholder="Enter Password"
+            placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -81,15 +78,16 @@ const LoginScreen = () => {
         </Form.Group>
 
         <Button variant="primary" type="submit" disabled={isLoading}>
-          Sign in
+          Sign up
         </Button>
         {isLoading && <Loader />}
       </Form>
+
       <Row className="py-3">
         <Col>
-          New Customer?{" "}
-          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-            Register
+          Already have an account?{" "}
+          <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
+            Login
           </Link>
         </Col>
       </Row>
@@ -97,4 +95,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;

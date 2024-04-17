@@ -12,6 +12,7 @@ import NotFound from "./components/NotFound.jsx";
 import ProductScreen from "./screens/ProductScreen.jsx";
 import CartScreen from "./screens/CartScreen.jsx";
 import LoginScreen from "./screens/LoginScreen.jsx";
+import RegisterScreen from "./screens/RegisterScreen.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/product/:id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
             <Route path="/login" element={<LoginScreen />} />
+            <Route path="/register" element={<RegisterScreen />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
