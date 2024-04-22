@@ -14,7 +14,7 @@ router.route("/").post(auth, addOrderItems).get(auth, admin, getAllOrders);
 
 router.route("/mine").get(auth, getMyOrders);
 
-router.route("/:id").get(auth, admin, getOrderById);
+router.route("/:id").get(auth,  getOrderById);
 
 router.route("/:id/pay").put(auth, updateOrderToPaid);
 
