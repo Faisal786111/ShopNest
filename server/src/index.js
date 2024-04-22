@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 dotenv.config();
 require("./config/db");
 const cors = require("cors");
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 })
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
 //  Error middleware
 app.use(notFound);

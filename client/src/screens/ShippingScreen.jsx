@@ -1,9 +1,9 @@
 import { Button, Form } from "react-bootstrap";
-import FormContainer from "../components/FormContainer";
 import { saveShippingAddress } from "../redux/slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
 
 const ShippingScreen = () => {

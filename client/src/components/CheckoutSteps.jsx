@@ -2,7 +2,10 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Nav } from "react-bootstrap";
 const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
   return (
-    <Nav className="jutify-content-center mb-4">
+    <Nav
+      className="mb-4"
+      style={{ display: "flex", justifyContent: "center" }}
+    >
       <Nav.Item>
         {step1 ? (
           <LinkContainer to="/login">
