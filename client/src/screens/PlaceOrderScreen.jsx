@@ -36,7 +36,7 @@ const PlaceOrderScreen = () => {
   const placeOrderHandler = async () => {
     console.log("place order");
     try {
-      const  res  = await createOrder({
+      const res = await createOrder({
         orderItems: cartItems,
         shippingAddress: { address, postalCode, city, country },
         paymentMethod,
@@ -75,7 +75,9 @@ const PlaceOrderScreen = () => {
             </ListGroup.Item>
             <ListGroup.Item>
               {cartItems.length === 0 ? (
-                <Message>No Order Items. <Link to="/">Go Back</Link></Message>
+                <Message>
+                  No Order Items. <Link to="/">Go Back</Link>
+                </Message>
               ) : (
                 <ListGroup variant="flush">
                   {cartItems.map((item) => (

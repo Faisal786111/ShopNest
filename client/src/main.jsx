@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import store from "./redux/store/store.js";
 import App from "./App.jsx";
 import "./assets/styles/bootstrap.custom.css";
@@ -22,24 +23,26 @@ import OrderScreen from "./screens/OrderScreen.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route index element={<HomeScreen />} />
-            <Route path="/product/:id" element={<ProductScreen />} />
-            <Route path="/cart" element={<CartScreen />} />
-            <Route path="/login" element={<LoginScreen />} />
-            <Route path="/register" element={<RegisterScreen />} />
-            <Route path="" element={<PrivateRoute />}>
-              <Route path="/shipping" element={<ShippingScreen />} />
-              <Route path="/payment" element={<PaymentScreen />} />
-              <Route path="/place-order" element={<PlaceOrderScreen />} />
-              <Route path="/order/:id" element={<OrderScreen />} />
+      <PayPalScriptProvider deferLoading={true}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />}>
+              <Route index element={<HomeScreen />} />
+              <Route path="/product/:id" element={<ProductScreen />} />
+              <Route path="/cart" element={<CartScreen />} />
+              <Route path="/login" element={<LoginScreen />} />
+              <Route path="/register" element={<RegisterScreen />} />
+              <Route path="" element={<PrivateRoute />}>
+                <Route path="/shipping" element={<ShippingScreen />} />
+                <Route path="/payment" element={<PaymentScreen />} />
+                <Route path="/place-order" element={<PlaceOrderScreen />} />
+                <Route path="/order/:id" element={<OrderScreen />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </PayPalScriptProvider>
     </Provider>
   </React.StrictMode>
 );

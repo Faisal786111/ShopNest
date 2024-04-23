@@ -1,5 +1,11 @@
 import { Link, useParams } from "react-router-dom";
-import { useGetOrderByIdQuery } from "../redux/slices/ordersApiSlice";
+import {
+  useGetOrderByIdQuery,
+  usePayOrderMutation,
+  useGetPayPalClientIdQuery,
+} from "../redux/slices/ordersApiSlice";
+import { useSelector } from "react-redux";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import {
   Form,
   Button,
@@ -12,9 +18,16 @@ import {
 } from "react-bootstrap";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { useEffect } from "react";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const {
     data: order,
@@ -22,6 +35,34 @@ const OrderScreen = () => {
     refetch,
     error,
   } = useGetOrderByIdQuery(orderId);
+
+  const {
+    data: paypal,
+    isLoading: loadingPayPal,
+    error: errorPayPal,
+  } = useGetPayPalClientIdQuery();
+
+  useEffect(() => {
+    if (!errorPayPal && !loadingPayPal && paypal) {
+      const loadPayPalScript = async () => {
+        paypalDispatch({
+          type: "resetOptions",
+          value: {
+            "client-id": paypal.clientId,
+            currency: "USD",
+          },
+        });
+
+        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+      };
+      if (order && !order.isPaid) {
+        if (!window.paypal) {
+          loadPayPalScript();
+        }
+      }
+    }
+  }, [order, errorPayPal, loadingPay, paypal, paypalDispatch]);
+
   return isLoading ? (
     <Loader />
   ) : error ? (
@@ -68,51 +109,50 @@ const OrderScreen = () => {
             </ListGroupItem>
             <ListGroupItem>
               <h2>Order Items</h2>
-                {order.orderItems.map((item) => (
-                  <ListGroupItem key={item._id}>
-                    <Row>
-                      <Col md={1}>
-                        <Image src={item.image} alt={item.name} fluid rounded />
-                      </Col>
-                      <Col>
-                        <Link to={`/product/${item.product}`}>{item.name}</Link>
-                      </Col>
-                      <Col md={4}>
-                        {item.qty} x ${item.price} = ${item.qty * item.price}
-                      </Col>
-                    </Row>
-                  </ListGroupItem>
-                ))}
+              {order.orderItems.map((item) => (
+                <ListGroupItem key={item._id}>
+                  <Row>
+                    <Col md={1}>
+                      <Image src={item.image} alt={item.name} fluid rounded />
+                    </Col>
+                    <Col>
+                      <Link to={`/product/${item.product}`}>{item.name}</Link>
+                    </Col>
+                    <Col md={4}>
+                      {item.qty} x ${item.price} = ${item.qty * item.price}
+                    </Col>
+                  </Row>
+                </ListGroupItem>
+              ))}
             </ListGroupItem>
           </ListGroup>
         </Col>
         <Col md={4}>
-            <Card>
-                <ListGroup variant="flush">
-                    <ListGroupItem>
-                        <h2>Order Summary</h2>
-                    </ListGroupItem>
-                    <ListGroupItem>
-                        <Row>
-                            <Col>Items</Col>
-                            <Col>${order.itemsPrice}</Col>
-                        </Row>
-                        <Row>
-                            <Col>Shipping</Col>
-                            <Col>${order.shippingPrice}</Col>
-                        </Row>
-                        <Row>
-                            <Col>Tax</Col>
-                            <Col>${order.taxPrice}</Col>
-                        </Row>
-                        <Row>
-                            <Col>Tototal</Col>
-                            <Col>${order.totalPrice}</Col>
-                        </Row>
-                    </ListGroupItem>
-                    
-                </ListGroup>
-            </Card>
+          <Card>
+            <ListGroup variant="flush">
+              <ListGroupItem>
+                <h2>Order Summary</h2>
+              </ListGroupItem>
+              <ListGroupItem>
+                <Row>
+                  <Col>Items</Col>
+                  <Col>${order.itemsPrice}</Col>
+                </Row>
+                <Row>
+                  <Col>Shipping</Col>
+                  <Col>${order.shippingPrice}</Col>
+                </Row>
+                <Row>
+                  <Col>Tax</Col>
+                  <Col>${order.taxPrice}</Col>
+                </Row>
+                <Row>
+                  <Col>Tototal</Col>
+                  <Col>${order.totalPrice}</Col>
+                </Row>
+              </ListGroupItem>
+            </ListGroup>
+          </Card>
         </Col>
       </Row>
     </>
