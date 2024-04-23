@@ -74,14 +74,14 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @access  Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
-
+    console.log(order);
     if (!order) {
         res.status(404);
         throw new Error("Order not found.");
     }
 
     order.isPaid = true;
-    order.paidAt = Data.now();
+    order.paidAt = Date.now();
     order.paymentResult = {
         id: req.body.id,
         status: req.body.status,
@@ -90,7 +90,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     }
 
     const updatedOrder = await order.save();
-
+    console.log("updated order" , updatedOrder);
     return res.json(updatedOrder);
 });
 

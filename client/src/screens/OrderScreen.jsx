@@ -6,6 +6,7 @@ import {
 } from "../redux/slices/ordersApiSlice";
 import { useSelector } from "react-redux";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { useEffect } from "react";
 import {
   Form,
   Button,
@@ -17,8 +18,8 @@ import {
   ListGroupItem,
 } from "react-bootstrap";
 import Loader from "../components/Loader";
+import toast from "react-hot-toast";
 import Message from "../components/Message";
-import { useEffect } from "react";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -63,6 +64,49 @@ const OrderScreen = () => {
     }
   }, [order, errorPayPal, loadingPay, paypal, paypalDispatch]);
 
+  const onApproveTest = async () => {
+    try{
+      await payOrder({ orderId, details: { payer: {} } });
+      refetch();
+      toast.success("Payment successful");
+
+    }catch(e){
+      console.error(e);
+    }
+  };
+
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: order.totalPrice,
+            },
+          },
+        ],
+      })
+      .then((orderId) => {
+        return orderId;
+      });
+  };
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(async (details) => {
+      try {
+        await payOrder({ orderId, details });
+        console.log(details);
+        refetch();
+        toast.success("Payment successful");
+      } catch (e) {
+        toast.error(e?.data?.message || e.message);
+        console.log("Error while onApprove function", e);
+      }
+    });
+  };
+  const onError = (error) => {
+    toast.error(error?.data?.message || error.message);
+    console.log(error);
+  };
   return isLoading ? (
     <Loader />
   ) : error ? (
@@ -151,6 +195,27 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroupItem>
+              {!order.isPaid && (
+                <ListGroupItem>
+                  {loadingPay && <Loader />}
+                  {isPending ? (
+                    <Loader />
+                  ) : (
+                    <div>
+                      <Button className="mb-3" onClick={onApproveTest}>
+                        Test Pay Order
+                      </Button>
+                      <div>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        ></PayPalButtons>
+                      </div>
+                    </div>
+                  )}
+                </ListGroupItem>
+              )}
             </ListGroup>
           </Card>
         </Col>
