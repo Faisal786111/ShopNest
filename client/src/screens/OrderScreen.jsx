@@ -45,7 +45,7 @@ const OrderScreen = () => {
     isLoading: loadingPayPal,
     error: errorPayPal,
   } = useGetPayPalClientIdQuery();
-  
+
   const deliverHandler = async () => {
     console.log("deliverHandler");
     try {
@@ -122,7 +122,6 @@ const OrderScreen = () => {
     toast.error(error?.data?.message || error.message);
     console.log(error);
   };
-
 
   return isLoading ? (
     <Loader />
