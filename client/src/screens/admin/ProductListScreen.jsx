@@ -1,17 +1,54 @@
-import { useGetProductsQuery } from "../../redux/slices/productApiSlice";
+import {
+  useGetProductsQuery,
+  useCreateProductMutation,
+  useDeleteProductByIdMutation
+} from "../../redux/slices/productApiSlice";
 import { Row, Col, Table, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaEdit, FaTimes, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
+import toast from "react-hot-toast";
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, isError: error } = useGetProductsQuery();
+  const {
+    data: products,
+    refetch,
+    isLoading,
+    isError: error,
+  } = useGetProductsQuery();
 
-  const deleteHandler = (id) => {
-    console.log("Product id", id);
+  const [createProduct, { isLoading: loadingCreate }] =
+    useCreateProductMutation();
 
+  const [deleteProduct, { isLoading: loadingDelete }] =
+    useDeleteProductByIdMutation();
+
+
+
+  const createProductHandler = async () => {
+    if (window.confirm("Are you sure , you want to create product.")) {
+      try {
+        await createProduct().unwrap();
+        refetch();
+        toast.success("Product created Successfully.");
+      } catch (e) {
+        toast.error(e?.data?.message || e.error);
+        console.error(e);
+      }
+    }
+  };
+
+  const deleteHandler = async (productId) => {
+    try{
+      await deleteProduct(productId).unwrap();
+      refetch();
+      toast.success("Product deleted Successfully.");
+    }catch(e){
+      toast.error(e?.data?.message || e.error);
+      console.error(e);
+    }
   };
   return (
     <>
@@ -20,12 +57,14 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <Button className="btn-sm sm-3 ">
+          <Button className="btn-sm sm-3 " onClick={createProductHandler}>
             <FaEdit /> Create Product
           </Button>
         </Col>
       </Row>
 
+      {loadingCreate && <Loader/>}
+      {loadingDelete && <Loader/>}
       {isLoading ? (
         <Loader />
       ) : error ? (
