@@ -20,6 +20,10 @@ import PaymentScreen from "./screens/PaymentScreen.jsx";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen.jsx";
 import OrderScreen from "./screens/OrderScreen.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
+import AdminPrivateRoute from "./components/AdminPrivateRoute.jsx";
+import OrderListScreen from "./screens/admin/UserListScreen.jsx";
+import ProductListScreen from "./screens/admin/ProductListScreen.jsx";
+import UserListScreen from "./screens/admin/UserListScreen.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -39,6 +43,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 <Route path="/place-order" element={<PlaceOrderScreen />} />
                 <Route path="/order/:id" element={<OrderScreen />} />
                 <Route path="/profile" element={<ProfileScreen />} />
+              </Route>
+              <Route path="" element={<AdminPrivateRoute />}>
+                <Route
+                  path="/admin/productlist"
+                  element={<ProductListScreen />}
+                />
+                <Route path="/admin/userlist" element={<UserListScreen />} />
+                <Route path="/admin/orderlist" element={<OrderListScreen />} />
               </Route>
             </Route>
             <Route path="*" element={<NotFound />} />
