@@ -65,12 +65,11 @@ const OrderScreen = () => {
   }, [order, errorPayPal, loadingPay, paypal, paypalDispatch]);
 
   const onApproveTest = async () => {
-    try{
+    try {
       await payOrder({ orderId, details: { payer: {} } });
       refetch();
       toast.success("Payment successful");
-
-    }catch(e){
+    } catch (e) {
       console.error(e);
     }
   };
@@ -202,9 +201,9 @@ const OrderScreen = () => {
                     <Loader />
                   ) : (
                     <div>
-                      <Button className="mb-3" onClick={onApproveTest}>
+                      {/*<Button className="mb-3" onClick={onApproveTest}>
                         Test Pay Order
-                      </Button>
+                  </Button>*/}
                       <div>
                         <PayPalButtons
                           createOrder={createOrder}

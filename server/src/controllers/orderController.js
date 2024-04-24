@@ -74,7 +74,6 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @access  Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
-    console.log(order);
     if (!order) {
         res.status(404);
         throw new Error("Order not found.");
