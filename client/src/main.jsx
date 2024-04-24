@@ -21,7 +21,7 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen.jsx";
 import OrderScreen from "./screens/OrderScreen.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import AdminPrivateRoute from "./components/AdminPrivateRoute.jsx";
-import OrderListScreen from "./screens/admin/UserListScreen.jsx";
+import OrderListScreen from "./screens/admin/OrderListScreen.jsx";
 import ProductListScreen from "./screens/admin/ProductListScreen.jsx";
 import UserListScreen from "./screens/admin/UserListScreen.jsx";
 

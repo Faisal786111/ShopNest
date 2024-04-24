@@ -123,7 +123,7 @@ const ProfileScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {orders === "[]" ? (
+              {orders.length ? (
                 orders.map((order) => (
                   <tr key={order._id}>
                     <td>{order._id}</td>

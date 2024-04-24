@@ -3,6 +3,7 @@ import {
   useGetOrderByIdQuery,
   usePayOrderMutation,
   useGetPayPalClientIdQuery,
+  useDeliverOrderMutation,
 } from "../redux/slices/ordersApiSlice";
 import { useSelector } from "react-redux";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
@@ -27,6 +28,8 @@ const OrderScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -42,6 +45,19 @@ const OrderScreen = () => {
     isLoading: loadingPayPal,
     error: errorPayPal,
   } = useGetPayPalClientIdQuery();
+  
+  const deliverHandler = async () => {
+    console.log("deliverHandler");
+    try {
+      const res = await deliverOrder(orderId).unwrap();
+      console.log(res);
+      refetch();
+      toast.success("Order deliver successful");
+    } catch (e) {
+      toast.error(e?.data?.message || e.message);
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal) {
@@ -98,7 +114,7 @@ const OrderScreen = () => {
         toast.success("Payment successful");
       } catch (e) {
         toast.error(e?.data?.message || e.message);
-        console.log("Error while onApprove function", e);
+        console.error("Error while onApprove function", e);
       }
     });
   };
@@ -106,6 +122,8 @@ const OrderScreen = () => {
     toast.error(error?.data?.message || error.message);
     console.log(error);
   };
+
+
   return isLoading ? (
     <Loader />
   ) : error ? (
@@ -215,6 +233,21 @@ const OrderScreen = () => {
                   )}
                 </ListGroupItem>
               )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroupItem>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroupItem>
+                )}
             </ListGroup>
           </Card>
         </Col>
