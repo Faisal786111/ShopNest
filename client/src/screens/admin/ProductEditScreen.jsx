@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams , useNavigate} from "react-router-dom";
 import {
   useGetProductByIdQuery,
   useUpdateOrderByIdMutation,
@@ -21,6 +21,8 @@ const ProductEditScreen = () => {
 
   const [updateProductById, { isLoading: loadingUpdate }] =
     useUpdateOrderByIdMutation();
+
+  const navigate = useNavigate();
 
   const {
     data: products,
@@ -61,6 +63,7 @@ const ProductEditScreen = () => {
     try {
       const res = await updateProductById({updateProduct , productId}).unwrap();
       console.log(res);
+      navigate("/admin/productlist");
       toast.success("Product updated successfully.");
     } catch (e) {
       toast.error(e?.data?.message || e.error);
