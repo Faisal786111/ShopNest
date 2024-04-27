@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { useEffect } from "react";
 import {
-  Form,
   Button,
   Card,
   Row,
@@ -218,9 +217,9 @@ const OrderScreen = () => {
                     <Loader />
                   ) : (
                     <div>
-                      {/*<Button className="mb-3" onClick={onApproveTest}>
+                      <Button className="mb-3" onClick={onApproveTest}>
                         Test Pay Order
-                  </Button>*/}
+                      </Button>
                       <div>
                         <PayPalButtons
                           createOrder={createOrder}
