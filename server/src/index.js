@@ -28,6 +28,10 @@ app.use(express.urlencoded({ extended: true }));
 // Cookie parser middleware
 app.use(cookieParser());
 
+const dirname = path.resolve();
+
+app.use("/uploads" , express.static(path.join(dirname , "/uploads")));
+
 app.get("/", (req, res) => {
     res.json({ message: "API is running" });
 })
@@ -40,10 +44,6 @@ app.use("/api/config/paypal", (req , res)=>{
 });
 
 
-console.log("paht resolve" , path.resolve());
-const dirname = path.resolve();
-
-app.use("/uploads" , express.static(path.join(dirname , "/uploads")));
 
 //  Error middleware
 app.use(notFound);

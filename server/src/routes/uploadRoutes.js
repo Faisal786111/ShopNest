@@ -36,6 +36,7 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
     return res.status(201).json({
         message: "Image uploaded successfully.",
         file: req.file,
+        image: `/images/${req.file.filename}`
     })
 }, (error, req, res, next) => {
     res.status(400);

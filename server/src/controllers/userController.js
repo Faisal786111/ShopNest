@@ -41,7 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
         }
         generateToken(res, user._id);
 
-        return res.status(201).json({ message: "User created successfully." , user});
+        return res.status(201).json({ message: "User created successfully.", user });
     }
 
     return res.status(400).json({ message: "User already exists." });
@@ -94,35 +94,56 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get users
-// @route   POST /api/users
+// @route   GET /api/users
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    console.log(users);
+    if (!users) {
+        res.status(404);
+        throw new Error("Users not found.");
+    }
 
-    return res.json("get users");
+    return res.json(users);
 });
 
 // @desc    Get user by Id
 // @route   GET /api/users/:id
 // @access  Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
-
-    return res.json("get user by id");
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        res.status(404);
+        throw new Error("Users not found.");
+    }
+    return res.json(user);
 });
 
 // @desc    Delete user by Id
 // @route   DELETE /api/users/:id
 // @access  Private/Admin
 const deleteUserById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        res.status(404);
+        throw new Error("Users not found.");
+    }
 
-    return res.json("delete user");
+    const deletedUser = await User.deleteOne({ _id: user._id });
+    return res.json(deletedUser);
 });
 
 // @desc    Update user by Id
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 const updateUserById = asyncHandler(async (req, res) => {
-
-    return res.json("update user");
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { runValidators: true, new: true });
+    console.log(updatedUser);
+    if (!updatedUser) {
+        res.status(404);
+        throw new Error("Users not found.");
+    }
+    return res.status(201).json(updatedUser);
 });
 
 module.exports = {
