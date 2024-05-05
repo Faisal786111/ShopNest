@@ -25,6 +25,7 @@ import OrderListScreen from "./screens/admin/OrderListScreen.jsx";
 import ProductListScreen from "./screens/admin/ProductListScreen.jsx";
 import UserListScreen from "./screens/admin/UserListScreen.jsx";
 import ProductEditScreen from "./screens/admin/ProductEditScreen.jsx";
+import UserEditScreen from "./screens/admin/UserEditScreen.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -52,7 +53,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 />
                 <Route path="/admin/userlist" element={<UserListScreen />} />
                 <Route path="/admin/orderlist" element={<OrderListScreen />} />
-                <Route path="/admin/product/:id/edit" element={<ProductEditScreen />} />
+                <Route
+                  path="/admin/product/:id/edit"
+                  element={<ProductEditScreen />}
+                />
+                <Route
+                  path="/admin/user/:id/edit"
+                  element={<UserEditScreen />}
+                />
               </Route>
             </Route>
             <Route path="*" element={<NotFound />} />

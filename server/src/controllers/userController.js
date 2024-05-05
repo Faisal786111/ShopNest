@@ -137,12 +137,18 @@ const deleteUserById = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 const updateUserById = asyncHandler(async (req, res) => {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { runValidators: true, new: true });
-    console.log(updatedUser);
-    if (!updatedUser) {
+    console.log("updateUserById : " , req.body);
+    console.log(req.params.id);
+    const user = await User.findById(req.body.userId || req.params.id);
+    console.log(user);
+    if (!user) {
         res.status(404);
         throw new Error("Users not found.");
     }
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin || user.isAdmin;
+    const updatedUser = await user.save();
     return res.status(201).json(updatedUser);
 });
 

@@ -1,17 +1,34 @@
 import { useEffect, useState } from "react";
-import { useGetUsersDetailsQuery } from "../../redux/slices/usersApiSlice";
-import { Row, Col, Table, Button } from "react-bootstrap";
+import {
+  useGetUsersDetailsQuery,
+  useDeleteUserMutation,
+} from "../../redux/slices/usersApiSlice";
+import { Table, Button } from "react-bootstrap";
 import { FaCheck, FaEdit, FaTimes, FaTrash } from "react-icons/fa";
+import { LinkContainer } from "react-router-bootstrap";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { LinkContainer } from "react-router-bootstrap";
+import toast from "react-hot-toast";
 
 const UserListScreen = () => {
-  const { data: usersDetail, isLoading, isError } = useGetUsersDetailsQuery();
-  console.log(usersDetail);
+  const {
+    data: usersDetail,
+    refetch,
+    isLoading,
+    isError,
+  } = useGetUsersDetailsQuery();
 
-  const deleteHandler = (userId) => {
-    console.log("Dleete : ", userId);
+  const [deleteUser, { isLoading: deleteLoader }] = useDeleteUserMutation();
+
+  const deleteHandler = async (userId) => {
+    try {
+      await deleteUser(userId).unwrap();
+      refetch();
+      toast.success("User Deleted Successfully.");
+    } catch (e) {
+      toast.error(e?.data?.message || e.error);
+      console.log(e);
+    }
   };
 
   return isLoading ? (
@@ -23,7 +40,8 @@ const UserListScreen = () => {
   ) : (
     <>
       <h1>Users</h1>
-      <Table striped hover responsive className="">
+      {deleteLoader && <Loader />}
+      <Table striped hover responsive >
         <thead>
           <tr>
             <th>ID</th>
