@@ -47,6 +47,9 @@ const ProductScreen = () => {
     navigate("/cart");
   };
 
+  const [createReview, { isLoading: productReviewLoader }] =
+    useCreateReviewMutation();
+    
   const reviewSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -63,8 +66,6 @@ const ProductScreen = () => {
       console.error(e);
     }
   };
-  const [createReview, { isLoading: productReviewLoader }] =
-    useCreateReviewMutation();
 
   return (
     <>

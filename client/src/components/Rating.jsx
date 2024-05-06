@@ -49,7 +49,7 @@ const Rating = ({ rating, text }) => {
         )}
       </span>
 
-      <span className="rating-text">{text && text} Reviews</span>
+      {text && <span className="rating-text">{ text} Reviews</span>}
     </div>
   );
 };
