@@ -35,6 +35,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Routes>
             <Route path="/" element={<App />}>
               <Route index element={<HomeScreen />} />
+              <Route path="/page/:pageNumber" element={<HomeScreen />} />
               <Route path="/product/:id" element={<ProductScreen />} />
               <Route path="/cart" element={<CartScreen />} />
               <Route path="/login" element={<LoginScreen />} />

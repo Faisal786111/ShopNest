@@ -5,12 +5,18 @@ const asyncHandler = require("../middlewares/asyncHandler");
 // @route   GET /api/products
 // @access  Public 
 const getAllProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find({}).select("-__v");
-    if (!products) {
-        return res.status(404).json({ message: "Not found." });
+    const pageSize = 2;
+    const page = Number(req.query.pageNumber) || 1;
+    const count = await Product.countDocuments({});
+    const foundProducts = await Product.find({}).limit(pageSize).skip(pageSize * (page - 1));
+
+    if (!foundProducts) {
+        return res.status(404).json({ message: "Products not found." });
     }
-    return res.json(products);
+
+    return res.json({ products: foundProducts, page, pages: Math.ceil(count / pageSize) });
 });
+
 
 // @desc    Fetch single product by Id
 // @route   GET /api/products/:id
