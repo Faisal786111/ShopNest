@@ -1,31 +1,33 @@
 import {
   useGetProductsQuery,
   useCreateProductMutation,
-  useDeleteProductByIdMutation
+  useDeleteProductByIdMutation,
 } from "../../redux/slices/productApiSlice";
 import { Row, Col, Table, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaEdit, FaTimes, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import toast from "react-hot-toast";
+import Paginate from "../../components/Paginate";
 
 const ProductListScreen = () => {
+  const { pageNumber } = useParams();
+  console.log(pageNumber);
   const {
-    data: products,
+    data,
     refetch,
     isLoading,
     isError: error,
-  } = useGetProductsQuery();
+  } = useGetProductsQuery({ pageNumber });
+  console.log(data);
 
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
 
   const [deleteProduct, { isLoading: loadingDelete }] =
     useDeleteProductByIdMutation();
-
-
 
   const createProductHandler = async () => {
     if (window.confirm("Are you sure , you want to create product.")) {
@@ -41,11 +43,11 @@ const ProductListScreen = () => {
   };
 
   const deleteHandler = async (productId) => {
-    try{
+    try {
       await deleteProduct(productId).unwrap();
       refetch();
       toast.success("Product deleted Successfully.");
-    }catch(e){
+    } catch (e) {
       toast.error(e?.data?.message || e.error);
       console.error(e);
     }
@@ -63,8 +65,8 @@ const ProductListScreen = () => {
         </Col>
       </Row>
 
-      {loadingCreate && <Loader/>}
-      {loadingDelete && <Loader/>}
+      {loadingCreate && <Loader />}
+      {loadingDelete && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -82,8 +84,8 @@ const ProductListScreen = () => {
             </tr>
           </thead>
           <tbody>
-            {products.length ? (
-              products.map((product) => (
+            {data.products.length ? (
+              data.products.map((product) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
@@ -116,6 +118,14 @@ const ProductListScreen = () => {
           </tbody>
         </Table>
       )}
+
+      {data ? (
+        <Paginate pages={data.pages} page={data.page} isAdmin={true} />
+      ) : isLoading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : null}
     </>
   );
 };

@@ -52,6 +52,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                   path="/admin/productlist"
                   element={<ProductListScreen />}
                 />
+                <Route
+                  path="/admin/productlist/:pageNumber"
+                  element={<ProductListScreen />}
+                />
                 <Route path="/admin/userlist" element={<UserListScreen />} />
                 <Route path="/admin/orderlist" element={<OrderListScreen />} />
                 <Route

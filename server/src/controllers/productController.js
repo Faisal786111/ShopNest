@@ -5,7 +5,7 @@ const asyncHandler = require("../middlewares/asyncHandler");
 // @route   GET /api/products
 // @access  Public 
 const getAllProducts = asyncHandler(async (req, res) => {
-    const pageSize = 2;
+    const pageSize = 4;
     const page = Number(req.query.pageNumber) || 1;
     const count = await Product.countDocuments({});
     const foundProducts = await Product.find({}).limit(pageSize).skip(pageSize * (page - 1));
