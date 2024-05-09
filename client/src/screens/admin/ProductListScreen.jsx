@@ -14,14 +14,12 @@ import Paginate from "../../components/Paginate";
 
 const ProductListScreen = () => {
   const { pageNumber } = useParams();
-  console.log(pageNumber);
   const {
     data,
     refetch,
     isLoading,
     isError: error,
   } = useGetProductsQuery({ pageNumber });
-  console.log(data);
 
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
