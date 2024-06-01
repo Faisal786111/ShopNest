@@ -134,4 +134,17 @@ const createReview = asyncHandler(async (req, res) => {
     throw new Error("Product already reviewed.");
 });
 
-module.exports = { getAllProducts, getProductById, createProduct, deleteProductById, updateProductById, createReview };
+// @desc    Fetch top products
+// @route   GET /api/products/top
+// @access  Public 
+const getTopRatedProducts = asyncHandler(async (req, res) => {
+    const product = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+    if (!product || product.length === 0) {
+        res.status(404);
+        throw new Error("Resource not found.");
+    }
+    return res.json(product);
+});
+
+module.exports = { getAllProducts, getProductById, createProduct, deleteProductById, updateProductById, createReview, getTopRatedProducts };
