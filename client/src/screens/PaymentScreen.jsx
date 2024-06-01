@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { savePaymentMethod } from "../redux/slices/cartSlice";
 import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
+import Meta from "../components/Meta";
 
 const PaymentScreen = () => {
   const [paymentMethod, setPaymentMethod] = useState("PayPal");
@@ -30,6 +31,7 @@ const PaymentScreen = () => {
     <FormContainer>
       <CheckoutSteps step1 step2 step3 />
       <h1>Payment</h1>
+      <Meta title="Payment"/>
       <Form onSubmit={submitHandler}>
         <Form.Group>
           <Form.Label as="legend">Select Method</Form.Label>

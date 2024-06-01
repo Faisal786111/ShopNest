@@ -20,6 +20,7 @@ import {
 import Loader from "../components/Loader";
 import toast from "react-hot-toast";
 import Message from "../components/Message";
+import Meta from "../components/Meta";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -129,6 +130,7 @@ const OrderScreen = () => {
   ) : (
     <>
       <h1>Order {order._id}</h1>
+      <Meta title="Order Page"/>
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">

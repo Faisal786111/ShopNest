@@ -7,6 +7,7 @@ import { useRegisterMutation } from "../redux/slices/usersApiSlice";
 import FormContainer from "../components/FormContainer";
 import toast from "react-hot-toast";
 import Loader from "../components/Loader";
+import Meta from "../components/Meta";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -45,6 +46,8 @@ const RegisterScreen = () => {
   return (
     <FormContainer>
       <h1>Sign Up</h1>
+      <Meta title="Sign Up" />
+
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="name">
           <Form.Label>Name</Form.Label>

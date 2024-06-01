@@ -8,6 +8,7 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import toast from "react-hot-toast";
+import Meta from "../components/Meta";
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ const PlaceOrderScreen = () => {
           <ListGroup variant="flush">
             <ListGroup.Item variant="flush">
               <h2>Shipping</h2>
+              <Meta title="Place Order"/>
               <p>
                 <strong> Address : </strong>
                 {address} {city} {postalCode} {country}

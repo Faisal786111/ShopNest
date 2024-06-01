@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
 import toast from "react-hot-toast";
 import Loader from "../components/Loader";
+import Meta from "../components/Meta";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -57,6 +58,7 @@ const LoginScreen = () => {
   return (
     <FormContainer>
       <h1>Sign In</h1>
+      <Meta title="Sign In"/>
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email address</Form.Label>

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { Link } from "react-router-dom";
+import Meta from "../components/Meta";
 
 const ProfileScreen = () => {
   const [profile, setProfile] = useState({
@@ -66,6 +67,7 @@ const ProfileScreen = () => {
       <Col md={3}>
         <Form onSubmit={submitHandler}>
           <h2>User Profile</h2>
+          <Meta title="User Profile"/>
           <Form.Group className="mb-3" controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control

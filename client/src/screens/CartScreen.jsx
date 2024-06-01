@@ -12,6 +12,7 @@ import {
   Card,
 } from "react-bootstrap";
 import Message from "../components/Message";
+import Meta from "../components/Meta";
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const CartScreen = () => {
     <Row>
       <Col md={8}>
         <h1 className="mb-3">Shopping Cart</h1>
+        <Meta title="Shopping Cart"/>
         {cartItems.length === 0 ? (
           <Message>
             Your cart is empty <Link to="/">Go Back</Link>

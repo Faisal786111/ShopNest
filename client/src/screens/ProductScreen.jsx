@@ -22,6 +22,7 @@ import { addToCart } from "../redux/slices/cartSlice";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import Meta from "../components/Meta";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -49,7 +50,7 @@ const ProductScreen = () => {
 
   const [createReview, { isLoading: productReviewLoader }] =
     useCreateReviewMutation();
-    
+
   const reviewSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -77,6 +78,8 @@ const ProductScreen = () => {
         </Message>
       ) : (
         <>
+          <Meta title={product[0].name} />
+
           <Link className="btn btn-light my-3" to="/">
             Go Back
           </Link>
